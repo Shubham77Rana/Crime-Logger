@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	
+	<head>
+		<title> Search in map </title>
+
+		<style type="text/css">
+			
+			#crimemap
+			{
+				width: 500px;
+				height: 500px;
+				border: 1px solid gray;
+			}
+
+			#searchlocation
+			{
+				width: 500px;
+			}
+
+		</style>
+
+		<script type="text/javascript">
+			
+			function InitialiseMap()
+			{
+				var crimeIcon = {
+					url: "assets/images/here.png",
+					origin: new google.maps.Point(0, 0),
+					anchor: new google.maps.Point(17, 34),
+					scaledSize: new google.maps.Size(35, 35)
+				};
+
+				var geu = {lat: 30.273471, lng: 77.999716};
+				var map = new google.maps.Map(document.getElementById('crimemap'),
+				{
+					zoom: 18,
+					center: geu
+				});
+
+				var markPoint = new google.maps.Marker(
+				{
+					position: geu,
+					map: map,
+					icon: crimeIcon
+				});
+
+				var search = document.getElementById('searchlocation');
+				var searchBox = new google.maps.places.SearchBox(search);
+
+			var markers = [markPoint];
+		    searchBox.addListener('places_changed', function() 
+		    {
+		      var places = searchBox.getPlaces();
+
+		      if (places.length == 0) {
+		        return;
+		      }
+
+		      markers.forEach(function(marker) 
+		      {
+		        marker.setMap(null);
+		      });
+		      
+		      markers = [];
+
+		      var bounds = new google.maps.LatLngBounds();
+		      places.forEach(function(place) 
+		      {
+		        if (!place.geometry) 
+		        {
+		          console.log("Returned place contains no geometry");
+		          return;
+		        }
+
+		        markers.push(new google.maps.Marker(
+		        {
+		          map: map,
+		          icon: crimeIcon,
+		          title: place.name,
+		          position: place.geometry.location
+		        }));
+
+		        if (place.geometry.viewport) 
+		        {
+		          bounds.union(place.geometry.viewport);
+		        } 
+		        else 
+		        {
+		          bounds.extend(place.geometry.location);
+		        }
+		      });
+		      map.fitBounds(bounds);
+		    });
+		}
+
+		</script>
+		<script type="text/javascript" async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiE1muLvBWpjfaQuB5QcMhB270wuw84GY&libraries=places&callback=InitialiseMap"></script>
+
+	</head>
+	
+	<body>
+
+		<input type="search" placeholder="Search Your location" id="searchlocation">
+		<div id="crimemap"></div>
+
+		<p id="console"></p>
+
+	</body>
+
+</html>

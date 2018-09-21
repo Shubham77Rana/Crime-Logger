@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Google Map </title>
+
+		<style type="text/css">
+			
+			#crimemap
+			{
+				width: 500px;
+				height: 500px;
+				border: 1px solid gray;
+			}
+
+		</style>
+
+		<script type="text/javascript">
+			
+			function InitialiseMap()
+			{
+				var crimeIcon = {
+					url: "assets/images/crimeicon.png",
+					origin: new google.maps.Point(0, 0),
+					anchor: new google.maps.Point(17, 34),
+					scaledSize: new google.maps.Size(35, 35)
+				};
+				var geu = {lat: 30.273471, lng: 77.999716};
+				var map = new google.maps.Map(document.getElementById('crimemap'),
+				{
+					zoom: 18,
+					center: geu
+				});
+
+				var markPoint = new google.maps.Marker(
+				{
+					position: geu,
+					map: map,
+					icon: crimeIcon
+				});
+			}
+
+		</script>
+		<script type="text/javascript" async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiE1muLvBWpjfaQuB5QcMhB270wuw84GY&callback=InitialiseMap"></script>
+
+	</head>
+	<body>
+
+		<div id="crimemap"> </div>
+
+	</body>
+</html>
